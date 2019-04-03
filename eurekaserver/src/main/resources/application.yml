@@ -1,0 +1,31 @@
+server:
+  port: 8761
+spring:
+  application:
+    name: eurekaserver
+  profiles:
+    active: dev
+  cloud:
+    inetutils:
+      preferred-networks: 127.0.0.1
+    client:
+      ip-address: 127.0.0.1
+eureka:
+  server:
+    #微服务节点连接超时时间
+    peer-node-read-timeout-ms: 3000
+    #是否开启自我保护 最好改成false 负载均衡时由于没有删除注册信息，导致别的服务在访问时会出现未找到问题
+    enable-self-preservation: true
+  instance:
+    #是否以 IP 注册到注册中心
+    prefer-ip-address: false
+    #注册限制的实例 ID
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+  client:
+    registerWithEureka: true
+    fetchRegistry: false
+    healthcheck:
+      enabled: true
+    serviceUrl:
+      #注册中心默认地址
+      defaultZone: http://127.0.0.1:8761/eureka/

@@ -1,0 +1,43 @@
+spring:
+  #动态数据源
+  datasource:
+    ucdsMysql:
+      url: jdbc:mysql://123.56.222.120:3306/agentMapMonitor?useUnicode=yes&characterEncoding=UTF8&useSSL=false
+      username: root
+      password: Avbr9@jhn
+      driver-class-name: com.mysql.jdbc.Driver
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      validation-query: SELECT 1 FROM DUAL
+      time-between-eviction-runs-millis: 300000
+      min-evictable-idle-time-millis: 1800000
+      initial-size: 5
+      max-active: 50
+      max-wait: 60000
+      min-idle: 5
+    tmpMysql:
+      url: jdbc:mysql://123.56.222.120:3306/agentMapMonitor?useUnicode=yes&characterEncoding=UTF8&useSSL=false
+      username: root
+      password: Avbr9@jhn
+      driver-class-name: com.mysql.jdbc.Driver
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      validation-query: SELECT 1 FROM DUAL
+      time-between-eviction-runs-millis: 300000
+      min-evictable-idle-time-millis: 1800000
+      initial-size: 5
+      max-active: 50
+      max-wait: 60000
+      min-idle: 5
+  #redis:
+    #database: 5
+    #pool:
+      #max-idle: 8
+      #min-idle: 0
+      #max-active: 8
+      #max-wait: -1
+    #sentinel:
+      #master: server-1M
+      #nodes: 10.130.29.69:27379,10.130.29.69:27380,10.130.29.69:27381
