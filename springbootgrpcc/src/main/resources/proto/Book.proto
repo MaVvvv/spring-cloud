@@ -1,0 +1,53 @@
+// 指定该proto文件所采用的语法
+syntax = "proto3";
+
+// 定义proto文件的包,可以不用指定
+package cool.mawei;
+// 指定proto文件生成的java类的包，可以不用指定，如果没有指定，将采用package的值
+option java_package = "cool.mawei.dto";
+
+/**
+ * 指定生产的java类的名字,如果没有指定，将使用proto文件的文件名作为类名.
+ * 如果文件名为 contact_address.proto, 生成的类名为ContactAddress.java
+ */
+option java_outer_classname = "Book";
+
+/**
+ * 当为true的时候，表示将所有的message各自生成在一个java文件中;
+ * 当为false的时候，将所有的内容生成在同一个文件中
+ */
+option java_multiple_files = true;
+
+/**
+ * 指定服务，客户端和服务端的stub, 服务端需要实现接口，客户端直接调用该接口。
+ */
+message BookRequest{
+    int32 id = 1;
+    string name = 2;
+    int32 pages = 3;
+    int32 size = 4;
+}
+
+// 书籍响应参数结构体
+message BookResponse {
+    int32 id = 1;
+    string name = 2;
+    int32 pages = 3;
+    int32 size = 4;
+    string author = 5;
+    string date = 6;
+    bool out = 7;
+    map<int32,string> list = 8;
+}
+
+// 通过书籍编号请求数据信息结构体
+message BookRequestById {
+    int32 id = 1;
+}
+
+// 无数据信息返回结构体
+message BookResponseCommon {
+    int32 code = 1;
+    string msg = 2;
+    BookResponse book = 3;
+}

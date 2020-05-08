@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package cool.mawei;
+option java_package = "cool.mawei.service";
+option java_multiple_files = true;
+import "HelloDTO.proto";
+
+service HelloRpcService {
+    //
+    rpc sayHello(HelloRequest) returns (HelloResponse) {};
+    //
+    rpc sayHelloAgain(HelloRequest) returns (HelloResponse) {};
+}

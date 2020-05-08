@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package cool.mawei;
+option java_package = "cool.mawei.service";
+option java_multiple_files = true;
+import "Book.proto";
+
+service BookRpcService {
+
+    /**
+     * 指定方法，必须以rpc开头，方法名(GetUserById)按照官网所给出的示例代码，均是大写，所以我们也按照这种方式定义。
+     *         MyRequest为方法的参数，必须指定，并且必须为message类型。
+     *      MyResponse为方法的返回类型，必须制定，并且必须为message类型。
+     */
+
+    // 添加书籍接口
+    rpc AddBook(BookRequest) returns (BookResponseCommon) {};
+
+    // 通过数据编号删除书籍接口
+    rpc DelBookById(BookRequestById) returns (stream BookResponseCommon) {};
+
+    // 更新数据信息接口
+    rpc UpdateBook(stream BookRequest) returns (BookResponseCommon) {};
+
+    // 查询书籍详情
+    rpc GetBookInfoById(stream BookRequestById) returns (stream BookResponseCommon){}
+}

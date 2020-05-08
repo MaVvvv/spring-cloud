@@ -1,0 +1,137 @@
+syntax = "proto3";
+
+package smartdialer.v1;
+
+//活动相关
+message CampStrategyInfo {
+    int32  camp_type = 1;                       // 活动类型：1.自动外拨 ; 3.预测外拨
+    int32  start_type = 2;                      // 启动模式：1.手工启动 ; 2.自动启动
+    int32  ani_type = 3;                        // 外显号码类型：1.企业外显号码 ; 4.ccnp技能组小号码池
+    string ani_info = 4;                        // 外显号码
+    int32 skillgroup_id = 5;                   // 技能组id
+    int32  undial_deal_type = 6 ;               // 当天未使用完名单操作：1.不再外呼 ; 2.继续外呼
+    string start_date = 7;                      // 执行开始日期
+    string end_date = 8;                        // 执行结束日期
+    repeated string run_sections = 9;           // 工作日执行时间段,支持1-3个
+    repeated int32 redial_results = 10;         // 重播指定结果码集合
+    int32  redial_count = 11;                   // 重播次数（失败处理次数）默认0*0 ~ 10（0代表不重播）
+    int32  redial_interval = 12;                // 重播间隔 （min）分钟
+    int32  channel_count = 13;                  // 初始通道数 
+                                                // 节假日相关功能待完成
+    map<string,string> map_fileds = 14;         // 预留扩展使用
+}
+
+message CampaignBasicInfo{
+    string entid =1;                            // 企业ID
+    string campid = 2;                          // 活动ID
+    string campname = 3;                        // 活动名称
+    CampStrategyInfo strategy_info = 4;         // 活动策略信息
+}
+
+message CampBriefInfo {
+    string entid  = 1 ;                         // 企业ID
+    string campid = 2 ;                         // 活动ID
+}
+
+message CampaignFullInfo {
+    string entid  = 1 ;                         // 企业ID
+    string campid = 2 ;                         // 活动ID
+    int32 status = 3 ;                          // 活动运行状态
+    CampaignBasicInfo campaign_basicinfo = 4;   // 活动基础信息
+}
+
+message PageInfo {
+    int32 page_cur = 1;                         // 当前页码
+    int32 page_size = 2;                        // 每页数量
+}
+
+message ConditionInfo {
+    int32 order_type = 1 ;                      // 排序类型：1:创建时间倒序
+}
+
+message CampQueryInfo{
+    PageInfo page_info = 1 ;                    // 分页
+    ConditionInfo condition_info = 2 ;          // 查询条件
+    string entid  = 3 ;                         // 企业ID
+    string campid = 4 ;                         // 活动ID
+    int32 status = 5 ;                          // 活动运行状态
+    string campname = 6;                        // 活动名称
+    string start_date = 7;                      // 执行开始日期
+    string end_date = 8;                        // 执行结束日期
+}
+
+message ReplyCampaignInfoList {
+    ReplyApgRpcResult res = 1;
+    int32 total_count = 2;                      // 活动总数
+    repeated CampaignFullInfo camp_info_list = 3 ;   
+}
+
+message ReplyApgRpcResult {
+    int32 rpc_result = 1;                      // rpc返回结果码
+    string rpc_result_desc = 2;                // rpc返回结果信息
+}
+
+message CampAdjustPace {
+    string entid = 1;                          // 企业ID
+    string campid = 2;                         // 活动ID
+    int32  channel_count = 3;                  // 通道数
+    int32  interval = 4;                       // 呼叫间隔(待定)
+}
+
+message CampRunInfo {
+    int32 campstatus = 1;                     // 活动状态
+    string campstatus_desc = 2;                // 活动描述信息
+    int32  count_channel = 3;                  // 通道数
+    int32  count_total_calllist = 4;           // 名单总量
+    int32  count_finished_calllist = 5;        // 已使用名单量
+    int32  connect_rate = 6;                   // 接通率
+    int32  agent_num = 7;                      // 坐席数量
+    int32  trans_success = 8;                  // 转坐席成功数
+    int32  trans_fail = 9;                     // 转坐席失败数
+    int32  trans_rate = 10;                    // 转坐席成功率
+    int32  interval = 11;                      // 呼叫间隔
+    int32  avg_queue_duration = 12;            // 转坐席平均排队时长
+    int32  avg_conn_duration = 13;             // 平均接通时长
+
+}
+
+message CampSnapInfo {
+    string entid  = 1;                         // 企业ID
+    string campid = 2;                         // 活动ID
+    string campname = 3;                       // 活动名称
+    int32  camptype = 4;                       // 活动类型
+    int32 camp_skillgroup = 5;                 // 技能组id
+    CampRunInfo camp_runinfo = 6;              // 活动运行信息
+}
+
+message ReplyCampSnapInfoList {
+    ReplyApgRpcResult res = 1;
+    repeated CampSnapInfo camp_snap_list = 2 ;
+}
+
+message ReplyCampBriefInfo {
+    ReplyApgRpcResult res = 1;
+    string entid  = 2 ;                         // 企业ID
+    string campid = 3 ;                         // 活动ID
+}
+
+message CampDelInfo {
+    string entid  = 1 ;                         // 企业ID
+    string campid = 2 ;                         // 活动ID
+    int32 status = 3 ;                          // 活动运行状态
+}
+
+message CampStatusInfo {
+    string entid  = 1 ;                         // 企业ID
+    string campid = 2 ;                         // 活动ID
+    int32 status = 3 ;                          // 活动运行状态
+}
+
+message CampQuerySnapInfo {
+    string entid  = 1;                         // 企业ID
+}
+
+service ApgCampaign {
+    rpc AddCampaign(CampaignBasicInfo) returns (ReplyCampBriefInfo) {};            // 新增活动
+}
+

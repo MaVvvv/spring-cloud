@@ -15,4 +15,9 @@ public class ApiServiceError implements ApiService {
     public String index() {
         return "服务发生故障！";
     }
+
+    @Override
+    public String index1() {
+        return null;
+    }
 }
