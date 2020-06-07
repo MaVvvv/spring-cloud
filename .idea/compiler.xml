@@ -13,7 +13,7 @@
         <module name="demo" />
         <module name="eurekaclient" />
         <module name="gateway" />
-        <module name="druid" />
+        <module name="mybatis-plus" />
         <module name="shiro" />
         <module name="oauth2server" />
         <module name="feign" />
@@ -25,6 +25,7 @@
         <module name="eurekaserver" />
         <module name="zookeeper" />
         <module name="jdk8" />
+        <module name="druid" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -44,6 +45,7 @@
       <module name="grpc" options="-parameters" />
       <module name="guava" options="-parameters" />
       <module name="jdk8" options="-parameters" />
+      <module name="mybatis-plus" options="-parameters" />
       <module name="oauth2server" options="-parameters" />
       <module name="shiro" options="-parameters" />
       <module name="springboot" options="-parameters" />

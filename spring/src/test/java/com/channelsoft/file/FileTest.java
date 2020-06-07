@@ -1,15 +1,16 @@
 package channelsoft.file;
 
+import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.ResourceUtils;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -57,5 +58,46 @@ public class FileTest {
     public void testFileBandle() {
         ResourceBundle resourceBundle = ResourceBundle.getBundle("applicationContext");
         System.out.println(resourceBundle.getString("spring-bean"));
+    }
+
+    @Test
+    public void testCopyFile() throws IOException {
+        System.out.println(System.getProperties().getProperty("file.encoding"));
+        File outFile = new File("D:\\tmp\\dcmsdialer\\calllist\\copy\\new_dialer.txt");
+
+        File file = ResourceUtils.getFile("D:\\tmp\\dcmsdialer\\calllist\\dialer.txt");
+        FileInputStream inputStream = new FileInputStream(file);
+        this.uploadFile(outFile,inputStream);
+
+        List<String> lines = FileUtils.readLines(outFile);
+        System.out.println(Charset.defaultCharset());
+        lines.forEach(line -> {
+            try {
+                System.out.println("UTF-8 =====" + line);
+                byte[] bytes = line.getBytes("GBK");
+                String gbkStr = new String(bytes,"GBK");
+                System.out.println("GBK ====" + gbkStr);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        });
+
+
+        //InputStreamReader fileInputStream = new InputStreamReader(new FileInputStream(file),Charset.forName("GBK"));
+        //FileUtils.copyInputStreamToFile(new FileInputStream(file),new File("D:\\tmp\\dcmsdialer\\calllist\\copy\\new_dialer.txt"));
+        //FileUtils.copyFileToDirectory(file,new File("D:\\tmp\\dcmsdialer\\calllist\\copy"));
+    }
+
+    public void uploadFile(File destFile, InputStream inputStream) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream,"GBK"));
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(destFile), Charset.defaultCharset()));
+        byte[] b = new byte[1024];
+        String line = null;
+        while ((line = reader.readLine()) != null) {
+            writer.write(line);
+            writer.write("\r\n");
+        }
+        writer.close();
+        reader.close();
     }
 }
