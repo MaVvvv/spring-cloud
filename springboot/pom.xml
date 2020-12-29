@@ -17,7 +17,7 @@
     <properties>
         <java.version>1.8</java.version>
         <kotlin.version>1.3.72</kotlin.version>
-        <mysql-connector>5.1.46</mysql-connector>
+        <mysql-connector>8.0.16</mysql-connector>
         <!-- sunyur share jar-->
         <!--<sy_common_share.version>0.6.9-isolation-SNAPSHOT</sy_common_share.version>-->
         <sy_common_share.version>0.7.5-i18n-SNAPSHOT</sy_common_share.version>
