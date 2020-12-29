@@ -1,10 +1,13 @@
 package com.hxb.gateway.filter;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
+import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -23,11 +26,13 @@ import java.util.Map;
  * @author Ma_wei
  * @since 2019-04-03 10:34
  */
+@Slf4j
 @Component
-public class ApiGlobalFilter implements GlobalFilter {
+public class ApiGlobalFilter implements GlobalFilter, Ordered {
 
-    /** 日志*/
-    private static final Logger log = LoggerFactory.getLogger(ApiGlobalFilter.class);
+    public ApiGlobalFilter() {
+        log.info("init ApiGlobalFilter");
+    }
 
     /**
      * 实现过滤器方法
@@ -39,6 +44,8 @@ public class ApiGlobalFilter implements GlobalFilter {
      */
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        log.info("-------------------------------------");
+
         ServerHttpRequest request = exchange.getRequest();
         ServerHttpResponse response = exchange.getResponse();
         String url = request.getURI().getPath();
@@ -57,5 +64,10 @@ public class ApiGlobalFilter implements GlobalFilter {
             return response.writeWith(Mono.just(buffer));
         }
         return chain.filter(exchange);
+    }
+
+    @Override
+    public int getOrder() {
+        return 0;
     }
 }

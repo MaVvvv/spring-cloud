@@ -1,6 +1,7 @@
 package com.cool.service.impl;
 
 import com.cool.service.ISpringIocService;
+import org.springframework.stereotype.Service;
 
 /**
  * 类功能描述
@@ -8,6 +9,7 @@ import com.cool.service.ISpringIocService;
  * @author Ma_wei
  * @since 2020-04-10 17:56
  */
+@Service
 public class SpringIocServiceAnImpl implements ISpringIocService {
 
     @Override

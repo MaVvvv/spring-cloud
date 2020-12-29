@@ -1,0 +1,12 @@
+model-result:
+  application-map:
+    mall-web:
+      order:
+        - "com.mxw.hxb.springboot.service.impl"
+        - "com.mxw.hxb.springboot.utils"
+      apaas:
+        - "com.mxw.hxb.springboot.web"
+    purchaser-web:
+      apply:
+        - "com.sunyur.apply"
+        - "com.sunyur.service.apply"

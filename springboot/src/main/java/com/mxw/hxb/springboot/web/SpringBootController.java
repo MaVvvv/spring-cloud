@@ -50,4 +50,37 @@ public class SpringBootController {
     public String testAOP(@RequestParam(value = "a") int a,@RequestParam(value = "b") int b) {
         return aopServiceImpl.test(a,b);
     }
+
+    @PostMapping(value = "/test/post-param")
+    public String testPostParam(@RequestBody String info,@RequestParam("tag") String tag,@RequestParam("businessId") String businessId) {
+        System.out.println("tag = " + tag + ",businessId = " + businessId);
+        System.out.println(info);
+        return "tag = " + tag + ",businessId = " + businessId;
+    }
+
+    @ResponseBody
+    @PostMapping(value = "/test/urlencoded",consumes = "application/json")
+    public String testContentTypeUrlencoded(@RequestHeader("Content-Type") String contentType,@RequestBody String params){
+        log.info("contentType = {}",contentType);
+        log.info("param = {}",params);
+
+        return params;
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/receive/subscribeResult/v1")
+    public String receiveSubscribeResult(@RequestHeader(value = "Content-Type",required = false) String contentType,
+                                                         @RequestParam(required = false) String tag,
+                                                   @RequestParam(required = false) String businessId){
+        System.out.println("contentType = " + contentType);
+        System.out.println("tag = " + tag);
+        System.out.println("businessId = " + businessId);
+        return businessId;
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/test-cookie/v1")
+    public String testCookie(){
+        return "/test-cookie/v1";
+    }
 }

@@ -1,6 +1,7 @@
 package com.cool.service.impl;
 
 import com.cool.service.ISpringIocService;
+import org.springframework.stereotype.Service;
 
 /**
  * 类功能描述

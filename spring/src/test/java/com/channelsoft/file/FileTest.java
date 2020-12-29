@@ -1,23 +1,18 @@
 package channelsoft.file;
 
-import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.util.ResourceUtils;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import java.io.*;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.zip.*;
 
 /**
  * 类功能描述
@@ -63,10 +58,15 @@ public class FileTest {
     @Test
     public void testCopyFile() throws IOException {
         System.out.println(System.getProperties().getProperty("file.encoding"));
-        File outFile = new File("D:\\tmp\\dcmsdialer\\calllist\\copy\\new_dialer.txt");
+        File outFile = new File("D:\\doc\\tmp\\copy\\test.jpg");
 
-        File file = ResourceUtils.getFile("D:\\tmp\\dcmsdialer\\calllist\\dialer.txt");
-        FileInputStream inputStream = new FileInputStream(file);
+        File file = ResourceUtils.getFile("D:\\doc\\tmp\\test.jpg");
+        //FileInputStream inputStream = new FileInputStream(file);
+        byte[] bytes = FileUtils.readFileToByteArray(file);
+        System.out.println(bytes.length);
+
+        FileUtils.writeByteArrayToFile(outFile,bytes);
+        /*//
         this.uploadFile(outFile,inputStream);
 
         List<String> lines = FileUtils.readLines(outFile);
@@ -80,7 +80,7 @@ public class FileTest {
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
-        });
+        });*/
 
 
         //InputStreamReader fileInputStream = new InputStreamReader(new FileInputStream(file),Charset.forName("GBK"));
@@ -100,4 +100,155 @@ public class FileTest {
         writer.close();
         reader.close();
     }
+
+    @Test
+    public void testFileBytes() throws IOException {
+        File outFile = new File("D:\\doc\\tmp\\copy\\test.jpg");
+
+        File file = ResourceUtils.getFile("D:\\doc\\tmp\\test.jpg");
+
+        byte[] byte1s = FileUtils.readFileToByteArray(file);
+        System.out.println(byte1s.length);
+        // 压缩
+        byte[] gByte1s = gZip(byte1s);
+        System.out.println(gByte1s.length);
+
+        String jpg = new String(Base64.encodeBase64(gByte1s));
+        System.out.println(jpg);
+        byte[] byte2s = Base64.decodeBase64(jpg);
+
+        byte[] gByte2s = unGZip(byte2s);
+        FileUtils.writeByteArrayToFile(outFile,gByte2s);
+    }
+
+    public static byte[] unGZip(byte[] data) {
+        byte[] b = null;
+        try {
+            ByteArrayInputStream bis = new ByteArrayInputStream(data);
+            GZIPInputStream gzip = new GZIPInputStream(bis);
+            byte[] buf = new byte[1024];
+            int num = -1;
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            while ((num = gzip.read(buf, 0, buf.length)) != -1) {
+                baos.write(buf, 0, num);
+            }
+            b = baos.toByteArray();
+            baos.flush();
+            baos.close();
+            gzip.close();
+            bis.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return b;
+    }
+
+    /***
+     * 压缩Zip
+     *
+     * @param data
+     * @return
+     */
+    public static byte[] zip(byte[] data) {
+        byte[] b = null;
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ZipOutputStream zip = new ZipOutputStream(bos);
+            ZipEntry entry = new ZipEntry("zip");
+            entry.setSize(data.length);
+            zip.putNextEntry(entry);
+            zip.write(data);
+            zip.closeEntry();
+            zip.close();
+            b = bos.toByteArray();
+            bos.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return b;
+    }
+
+    /***
+     * 解压Zip
+     *
+     * @param data
+     * @return
+     */
+    public static byte[] unZip(byte[] data) {
+        byte[] b = null;
+        try {
+            ByteArrayInputStream bis = new ByteArrayInputStream(data);
+            ZipInputStream zip = new ZipInputStream(bis);
+            while (zip.getNextEntry() != null) {
+                byte[] buf = new byte[1024];
+                int num = -1;
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                while ((num = zip.read(buf, 0, buf.length)) != -1) {
+                    baos.write(buf, 0, num);
+                }
+                b = baos.toByteArray();
+                baos.flush();
+                baos.close();
+            }
+            zip.close();
+            bis.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return b;
+    }
+
+    /**
+     * 对byte[]进行压缩
+     *
+     * @param 要压缩的数据
+     * @return 压缩后的数据
+     */
+    public static byte[] compress(byte[] data) {
+        System.out.println("before:" + data.length);
+
+        GZIPOutputStream gzip = null ;
+        ByteArrayOutputStream baos = null ;
+        byte[] newData = null ;
+
+        try {
+            baos = new ByteArrayOutputStream() ;
+            gzip = new GZIPOutputStream(baos);
+
+            gzip.write(data);
+            gzip.finish();
+            gzip.flush();
+
+            newData = baos.toByteArray() ;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                gzip.close();
+                baos.close() ;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println("after:" + newData.length);
+        return newData ;
+    }
+
+    public static byte[] gZip(byte[] data) {
+        byte[] b = null;
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            GZIPOutputStream gzip = new GZIPOutputStream(bos);
+            gzip.write(data);
+            gzip.finish();
+            gzip.close();
+            b = bos.toByteArray();
+            bos.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return b;
+    }
+
 }
