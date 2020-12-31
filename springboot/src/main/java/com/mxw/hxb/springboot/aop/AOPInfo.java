@@ -1,5 +1,7 @@
 package com.mxw.hxb.springboot.aop;
 
+import com.mxw.hxb.springboot.annotations.SyI18nFieldRoot;
+
 /**
  * 类功能描述
  *

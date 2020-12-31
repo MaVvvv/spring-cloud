@@ -24,10 +24,7 @@ public class ASyncTaskController {
     @GetMapping(value = "/do")
     public String doHandAsyncTask() {
         try {
-            for (int i = 0; i < 10; i++) {
-                log.info("cur i = {}",i);
-                aSyncTaskServiceImpl.doWait();
-            }
+            aSyncTaskServiceImpl.doWait();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

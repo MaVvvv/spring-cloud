@@ -9,4 +9,6 @@ package com.mxw.hxb.springboot.service;
 public interface IAopService {
 
     String test(int a,int b);
+
+    void sleepTime(int i) throws InterruptedException;
 }

@@ -1,7 +1,5 @@
 package com.mxw.hxb.springboot.annotations;
 
-import com.sunyur.common.i18n.enums.SyI18nConfigTypeEnum;
-
 import java.lang.annotation.*;
 
 /**
@@ -14,10 +12,6 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
-public @interface SyI18nField {
+public @interface SyI18nFieldRoot {
 
-    /**
-     * 属性类型
-     */
-    SyI18nConfigTypeEnum type();
 }

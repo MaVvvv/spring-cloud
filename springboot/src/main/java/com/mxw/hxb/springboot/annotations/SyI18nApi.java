@@ -14,5 +14,4 @@ import java.lang.annotation.*;
 @Inherited
 public @interface SyI18nApi {
 
-    String value() default "";
 }
