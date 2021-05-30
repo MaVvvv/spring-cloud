@@ -1,16 +1,23 @@
 package com.channelsoft;
 
 import com.alibaba.excel.EasyExcel;
-import com.channelsoft.easyexcel.CellDataDemoHeadDataListener;
-import com.channelsoft.easyexcel.Person;
+import com.channelsoft.easyexcel.*;
+import com.channelsoft.easyexcel.tcm.TCM0530FileDTO;
+import com.channelsoft.easyexcel.tcm.TCMFileDTO;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import kotlin.text.Regex;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import sun.misc.Regexp;
 
+import java.io.File;
 import java.util.*;
-import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * 类功能描述
@@ -20,7 +27,8 @@ import java.util.logging.Logger;
  */
 public class Test1 {
 
-    private static final Logger log = Logger.getLogger("Test1");
+    /** 日志*/
+    private static final Logger log = LoggerFactory.getLogger(Test1.class);
 
     @Test
     public void Test01() {
@@ -86,6 +94,31 @@ public class Test1 {
         String PATH = "D:\\Channelsoft\\workspace_idea\\channelsoft\\springcloud\\spring\\";
         String fileName = PATH + "easy-excel-write.xlsx";
         EasyExcel.write(fileName, Person.class).sheet("模板").doWrite(buildData());
+    }
+
+    /**
+     * 测试easyExcel的写操作
+     *
+     * @author Ma_wei
+     * @since 2020/4/23
+     */
+    @Test
+    public void testEasyExcelRead02() throws Exception {
+        String file1 = "D:\\google\\tmp\\chenghai.xlsx";
+        String file2 = "D:\\google\\tmp\\mawei.xlsx";
+        SupOrderHeadDataListener supOrderHeadDataListener = new SupOrderHeadDataListener();
+        EasyExcel.read(file1, SupOrderPO.class, supOrderHeadDataListener).sheet().doRead();
+        SopMallOrderHeadDataListener sopMallOrderHeadDataListener = new SopMallOrderHeadDataListener();
+        EasyExcel.read(file2, SopMallOrderPO.class, sopMallOrderHeadDataListener).sheet().doRead();
+
+        Set<String> supOrders = supOrderHeadDataListener.orderPOs;
+        System.out.println("supOrders.size = " + supOrders.size());
+
+        Set<String> orderNos = sopMallOrderHeadDataListener.orderPOs;
+        System.out.println("orderNos.size = " + orderNos.size());
+        // 交集
+        Set<String> differentNos = Sets.difference(orderNos,supOrders);
+        differentNos.forEach(System.out::println);
     }
 
     /**
@@ -165,9 +198,37 @@ public class Test1 {
                     System.out.println("未知");
             }
         }
-
-
-
-
     }
+
+    @Test
+    public void testTCMExcelReadWrite() {
+        String sourceFile = "D:\\doc\\user\\java\\";
+        String fileName1 = "3湿疮3320+含中医证型.xlsx";
+        EasyExcel.read(sourceFile + fileName1, TCMFileDTO.class, new CellTCMFileListener()).sheet().doRead();
+    }
+
+    @Test
+    public void testTCM0530ExcelReadWrite() {
+        String sourceFile = "D:\\doc\\user\\java\\0530\\";
+        String fileName1 = "湿疮症状数据252.xlsx";
+        EasyExcel.read(sourceFile + fileName1, TCM0530FileDTO.class, new CellParseTCM0530FileListener()).sheet().doRead();
+    }
+
+    @Test
+    public void testTCMExcelParse() {
+        String sourceFile = "D:\\doc\\user\\java\\";
+        String fileName1 = "组合.xlsx";
+        EasyExcel.read(sourceFile + fileName1, TCMFileDTO.class, new CellParseTCMFileListener()).sheet("湿疮2913").doRead();
+    }
+
+    @Test
+    public void test12(){
+        String str = "防风40克";
+        String reg = "\\d";
+        String regStr = str.replaceAll(reg,"hxb");
+        System.out.println("regStr = " + regStr);
+        String newStr = regStr.substring(0,regStr.indexOf("hxb"));
+        System.out.println(newStr);
+    }
+
 }

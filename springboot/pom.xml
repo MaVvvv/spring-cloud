@@ -21,6 +21,8 @@
         <!-- sunyur share jar-->
         <!--<sy_common_share.version>0.6.9-isolation-SNAPSHOT</sy_common_share.version>-->
         <sy_common_share.version>0.7.5-i18n-SNAPSHOT</sy_common_share.version>
+        <file_common_share.version>0.0.4-parts-SNAPSHOT</file_common_share.version>
+        <!--<log_client.version>0.3.4.3-login-log-SNAPSHOT</log_client.version>-->
     </properties>
 
     <dependencies>
@@ -87,6 +89,11 @@
             <version>3.13.1</version>
         </dependency>
         <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
@@ -99,6 +106,21 @@
             <groupId>com.sunyur.common</groupId>
             <artifactId>sy_common_share</artifactId>
             <version>${sy_common_share.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sunyur.common</groupId>
+            <artifactId>file_common_share</artifactId>
+            <version>${file_common_share.version}</version>
+        </dependency>
+        <!--<dependency>
+            <groupId>com.sunyur.log</groupId>
+            <artifactId>log_client</artifactId>
+            <version>${log_client.version}</version>
+        </dependency>-->
+        <dependency>
+            <groupId>org.codehaus.janino</groupId>
+            <artifactId>janino</artifactId>
+            <version>3.0.6</version>
         </dependency>
     </dependencies>
 

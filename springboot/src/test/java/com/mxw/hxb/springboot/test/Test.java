@@ -8,25 +8,24 @@ import com.google.common.collect.Sets;
 import com.mxw.hxb.springboot.test.constant.Param1;
 import com.mxw.hxb.springboot.test.constant.TestEnum;
 import com.mxw.hxb.springboot.test.jd.*;
+import com.mxw.hxb.springboot.test.model.JsModel;
 import com.mxw.hxb.springboot.test.model.Kd100LogisticsSubscribeModel;
+import com.sunyur.common.utils.RegexUtils;
 import lombok.val;
 import okhttp3.FormBody;
 import org.apache.commons.collections.CollectionUtils;
 import org.assertj.core.util.Lists;
 import org.joda.time.DateTime;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.text.MessageFormat;
+import java.time.*;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 /**
@@ -36,6 +35,12 @@ import java.util.stream.Collectors;
  * @since 2019-09-04 11:46
  */
 public class Test {
+
+    public static void main(String[] args) {
+        String msg = "name is {asdjfdklasfjlaj}";
+        System.out.println(MessageFormat.format(msg,1212));
+    }
+
 
     @org.junit.Test
     public void testListToMap(){
@@ -53,9 +58,7 @@ public class Test {
         Map<Long,List<Long>> group = classGroupList.stream().collect(Collectors.groupingBy(ClassGroup::getTeacherId,Collectors.mapping(ClassGroup::getStudentId,Collectors.toList())));
 
         System.out.println(group);
-        group.forEach((key,value) -> {
-            System.out.println(key + ">>>>>" + value);
-        });
+        group.forEach((key,value) -> System.out.println(key + ">>>>>" + value));
     }
 
     @org.junit.Test
@@ -391,5 +394,112 @@ public class Test {
         String className = "com.mxw.hxb.springboot.service.impl.MyResultServiceImpl";
         String packageName = className.substring(0,className.lastIndexOf("."));
         System.out.println(packageName);
+    }
+
+    @org.junit.Test
+    public void testLogService() {
+        List<String> jsons = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            String json = "{\"id\":\"mw00" + i + "\",\"traceId\":\"5e542b8b6cd86b990488d6c8caddaac" + i +"\",\"purchaserId\":3557,\"supplierId\":106,\"supplierName\":\"上海晨光科力普办公用品有限公司\",\"targetType\":2,\"userCode\":\"2\",\"schemes\":\"api\",\"level\":\"success\",\"interfaceId\":6,\"interfaceType\":\"api\",\"interfaceCode\":\"goods002\",\"interfaceName\":\"提交品牌信息\",\"interfaceVersion\":\"v1\",\"source\":\"customer\",\"ip\":\"172.26.108.112\",\"serviceName\":\"晨光电商\",\"business\":null,\"event\":null,\"urlPath\":\"/api/goods/brand/add\",\"method\":\"POST\",\"createTime\":1577787038000,\"executeTime\":1577787038000,\"elapsedTime\":120,\"userElapsedTime\":null,\"success\":true,\"resultCode\":null,\"resultMessage\":null,\"remark\":null,\"userParams\":\"[{\\\"code\\\": \\\"gkl0519999 \\\",\\\"name\\\": \\\"品牌0519999 \\\"}]\"}";
+            jsons.add(json);
+        }
+
+        String esJson = "[" + Joiner.on(",").join(jsons) + "]";
+        System.out.println(esJson);
+    }
+
+    @org.junit.Test
+    public void testSubString(){
+        String reason = "驳回，原因：{134079936422=134079936422订单开票状态必须为未开, 134075181568=134075181568订单开票状态必须为未开, 134073787362=134073787362订单开票状态必须为未开, " +
+                "134015877871=134015877871订单开票状态必须为未开, 134077958378=134077958378订单开票状态必须为未开, 134080174566=134080174566订单开票状态必须为未开, 134075298688=134075298688订单开票状态必须为未开, " +
+                "134080762309=134080762309订单开票状态必须为未开, 134073733954=134073733954订单开票状态必须为未开, 134075181600=134075181600订单开票状态必须为未开}";
+        reason = reason.substring(0,200);
+        System.out.println(reason);
+    }
+
+    @org.junit.Test
+    public void testLocalAgeDate() {
+        LocalDate localDate = LocalDate.now();
+        LocalDate days2AgoDate = localDate.minusDays(2);
+        ZonedDateTime zonedDateTime = days2AgoDate.atStartOfDay(ZoneId.systemDefault());
+        Date from = Date.from(zonedDateTime.toInstant());
+        System.out.println(from.toLocaleString());
+    }
+
+    @org.junit.Test
+    public void testHasText(){
+        String str = " ";
+        org.junit.Assert.assertTrue(StringUtils.hasText(str));
+    }
+
+    @org.junit.Test
+    public void testSub() {
+        String rangeBytes = "bytes 0-999/15834";
+        String substring = rangeBytes.substring(rangeBytes.indexOf("-") + 1);
+        System.out.println(substring);
+        String[] split = substring.split("/");
+        System.out.println("split[0] = " + split[0] + ",split[1] = " + split[1]);
+    }
+
+    @org.junit.Test
+    public void testSub1() {
+        String aa = "01000091";
+        String a1 = aa.substring(0,2);
+        System.out.println(a1);
+        int i = Integer.parseInt(a1);
+        System.out.println(i);
+    }
+
+    @org.junit.Test
+    public void testTime() {
+        LocalDate localDate = LocalDate.now();
+        int years = localDate.getYear();
+        int month = localDate.getMonth().getValue();
+        System.out.println(years + month);
+    }
+
+    @org.junit.Test
+    public void testArrar(){
+        String[] ints = {"2000"};
+        System.out.println(ints);
+    }
+
+
+
+    @org.junit.Test
+    public void testListParts(){
+        String msg = "name is {0}";
+        System.out.println(MessageFormat.format(msg, 1));
+    }
+
+    @org.junit.Test
+    public void testMsgModel() {
+        String str = "{\"code\":\"success\",\"content\":\"\\\"{\\\\\\\"total\\\\\\\":[{\\\\\\\"count\\\\\\\":1,\\\\\\\"key\\\\\\\":\\\\\\\"strong\\\\\\\"},{\\\\\\\"count\\\\\\\":0,\\\\\\\"key\\\\\\\":\\\\\\\"weak\\\\\\\"},{\\\\\\\"count\\\\\\\":2,\\\\\\\"key\\\\\\\":\\\\\\\"none\\\\\\\"}],\\\\\\\"items\\\\\\\":[{\\\\\\\"result\\\\\\\":\\\\\\\"无关系\\\\\\\",\\\\\\\"startNode\\\\\\\":{\\\\\\\"eid\\\\\\\":\\\\\\\"b7ea0e1e-0e57-48db-b054-c5added22b78\\\\\\\",\\\\\\\"name\\\\\\\":\\\\\\\"北京商越网络科技有限公司\\\\\\\"},\\\\\\\"link\\\\\\\":{\\\\\\\"startNode\\\\\\\":\\\\\\\"北京商越网络科技有限公司\\\\\\\",\\\\\\\"endNode\\\\\\\":\\\\\\\"天津市德商诚越科技有限公司\\\\\\\"},\\\\\\\"resultCode\\\\\\\":3,\\\\\\\"type\\\\\\\":\\\\\\\"无关联\\\\\\\",\\\\\\\"endNode\\\\\\\":{\\\\\\\"eid\\\\\\\":\\\\\\\"833e83d9-4163-48bc-8cf0-4e001164666d\\\\\\\",\\\\\\\"name\\\\\\\":\\\\\\\"天津市德商诚越科技有限公司\\\\\\\"}},{\\\\\\\"result\\\\\\\":\\\\\\\"无关系\\\\\\\",\\\\\\\"startNode\\\\\\\":{\\\\\\\"eid\\\\\\\":\\\\\\\"b7ea0e1e-0e57-48db-b054-c5added22b78\\\\\\\",\\\\\\\"name\\\\\\\":\\\\\\\"北京商越网络科技有限公司\\\\\\\"},\\\\\\\"link\\\\\\\":{\\\\\\\"startNode\\\\\\\":\\\\\\\"北京商越网络科技有限公司\\\\\\\",\\\\\\\"endNode\\\\\\\":\\\\\\\"天津市德商诚越科技有限公司\\\\\\\"},\\\\\\\"resultCode\\\\\\\":3,\\\\\\\"type\\\\\\\":\\\\\\\"无关联\\\\\\\",\\\\\\\"endNode\\\\\\\":{\\\\\\\"eid\\\\\\\":\\\\\\\"833e83d9-4163-48bc-8cf0-4e001164666d\\\\\\\",\\\\\\\"name\\\\\\\":\\\\\\\"天津市德商诚越科技有限公司\\\\\\\"}},{\\\\\\\"result\\\\\\\":\\\\\\\"强关系\\\\\\\",\\\\\\\"startNode\\\\\\\":{\\\\\\\"eid\\\\\\\":\\\\\\\"faf97b59-b5ea-494c-9989-61bd09daa8e7\\\\\\\",\\\\\\\"name\\\\\\\":\\\\\\\"上海商越科技中心\\\\\\\"},\\\\\\\"link\\\\\\\":{\\\\\\\"startNode\\\\\\\":\\\\\\\"上海商越科技中心\\\\\\\",\\\\\\\"endNode\\\\\\\":\\\\\\\"上海商越科技中心\\\\\\\"},\\\\\\\"resultCode\\\\\\\":1,\\\\\\\"type\\\\\\\":\\\\\\\"关键人员3层以内关系\\\\\\\",\\\\\\\"endNode\\\\\\\":{\\\\\\\"eid\\\\\\\":\\\\\\\"faf97b59-b5ea-494c-9989-61bd09daa8e7\\\\\\\",\\\\\\\"name\\\\\\\":\\\\\\\"上海商越科技中心\\\\\\\"}}]}\\\"\",\"success\":true}";
+
+    }
+
+    @org.junit.Test
+    public void testCode() {
+        String code = "userSyncAdd";
+        System.out.println(camelPkg(code));
+
+    }
+
+    private static String camelPkg(String param){
+        if (param == null || "".equals(param.trim())) {
+            return "";
+        }
+        int len = param.length();
+        StringBuilder sb = new StringBuilder(len);
+        for (int i = 0; i < len; i++) {
+            char c = param.charAt(i);
+            if (Character.isUpperCase(c)) {
+                sb.append(".");
+                sb.append(Character.toLowerCase(c));
+            } else {
+                sb.append(c);
+            }
+        }
+        return sb.toString();
     }
 }

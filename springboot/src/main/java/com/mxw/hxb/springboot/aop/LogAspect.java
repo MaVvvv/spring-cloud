@@ -72,12 +72,12 @@ public class LogAspect {
         String modifierType = Modifier.toString(signature.getModifiers());
         Object targetClass = joinPoint.getTarget();
         Object thisClass = joinPoint.getThis();
-        /*log.info("获取到方法名为:{}",methodName);
+        log.info("获取到方法名为:{}",methodName);
         log.info("获取到方法所属简单类名为：{}",simpleClassName);
         log.info("获取方法所属类的类名：{}",className);
         log.info("目标方法声明类型:{}", modifierType);
         log.info("被代理的对象：{}",targetClass);
-        log.info("代理对象自己：{}",thisClass);*/
+        log.info("代理对象自己：{}",thisClass);
         StringBuilder enterLog = new StringBuilder();
         enterLog.append(COMMA2).append(ENTER).append(simpleClassName).append(COMMA).append(methodName).append(METHOD).append(COMMA1);
         String logStr = enterLog.toString();

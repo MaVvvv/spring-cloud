@@ -1,6 +1,6 @@
 package com.hxb.jdk8.service;
 
-import com.sun.deploy.util.StringUtils;
+import com.google.common.base.Joiner;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -119,7 +119,7 @@ public class JavaEncrypt {
     public static String rsaEncrypt(String text,String pubKey,String modulus){
         List<String> list = Arrays.asList(text.split(""));
         Collections.reverse(list);
-        String _text = StringUtils.join(list,"");
+        String _text = Joiner.on("").join(list);
         BigInteger biText = new BigInteger(1,_text.getBytes());
         BigInteger biEx = new BigInteger(1,hexToBytes(pubKey));
         BigInteger biMod = new BigInteger(1,hexToBytes(modulus));

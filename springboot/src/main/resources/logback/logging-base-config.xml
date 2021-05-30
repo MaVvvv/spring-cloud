@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<included>
+
+    <!--业务系统传进来-->
+    <property name="operate_log" value="${COLLECT_LOG_NAME}"/>
+    <property name="dir" value="/opt/collect_log/logs"/>
+
+    <appender name="operateLogFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${dir}/${operate_log}.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <FileNamePattern>${dir}/${operate_log}.%d{yyyy-MM-dd}.%i.log.zip</FileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!--文件超过 100 MB 压缩为zip -->
+                <maxFileSize>100 MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <Pattern>%msg%n</Pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <logger name="printOperateLog" level="INFO" additivity="false">
+        <appender-ref ref="operateLogFile"/>
+    </logger>
+
+</included>

@@ -51,6 +51,13 @@ public class SyI18nAnnoController {
         return ModelResultUtil.success(applicationClassifyModel);
     }
 
+    /**
+     * 测试国际化注解响应列表
+     *
+     * @return ModelListResult<ApplicationClassifyModel>
+     * @author Ma_wei
+     * @since 2020/12/31
+     */
     @SyI18nApi
     @GetMapping(value = "/anno/list")
     public ModelListResult<ApplicationClassifyModel> doHandAnnoList() {

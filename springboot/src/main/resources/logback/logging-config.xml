@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configuration>
+    <property name="COLLECT_LOG_NAME" value="spring_boot_collect.log"/>
+    <include resource="logback/logging-base-config.xml"/>
+    <!--<property name="LOGIN_LOG_NAME" value="spring_boot_login.log"/>
+    <include resource="logback/logging-login-config.xml"/>-->
+
     <property name="LOG_DIR" value="/opt/springboot/logs/"/>
     <property name="LOG_NAME" value="springboot"/>
 

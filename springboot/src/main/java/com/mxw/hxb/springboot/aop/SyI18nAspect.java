@@ -4,7 +4,7 @@ import com.mxw.hxb.springboot.annotations.SyI18nApi;
 import com.mxw.hxb.springboot.annotations.SyI18nField;
 import com.mxw.hxb.springboot.annotations.SyI18nFieldRoot;
 import com.sunyur.common.i18n.enums.SyI18nConfigTypeEnum;
-import com.sunyur.common.i18n.enums.SyI18nLangEnum;
+import com.sunyur.common.i18n.enums.SyI18nLanguageEnum;
 import com.sunyur.common.pagination.ModelListResult;
 import com.sunyur.common.pagination.ModelResult;
 import lombok.extern.slf4j.Slf4j;
@@ -12,8 +12,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.util.Strings;
 import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
+import sun.reflect.generics.reflectiveObjects.TypeVariableImpl;
 
-import java.lang.reflect.Field;
+import java.lang.reflect.*;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -139,8 +140,8 @@ public class SyI18nAspect {
             // 国际化操作
             if (true){  //LangCookieUtil.checkHtmlLangCookieExists()
                 String langName = Strings.EMPTY;
-                SyI18nLangEnum syI18nLangEnum = SyI18nLangEnum.EN;//LangCookieUtil.readHtmlLangCookieValue();
-                if (syI18nLangEnum != SyI18nLangEnum.CN) {
+                SyI18nLanguageEnum syI18nLangEnum = SyI18nLanguageEnum.EN;//LangCookieUtil.readHtmlLangCookieValue();
+                if (syI18nLangEnum != SyI18nLanguageEnum.CN) {
                     switch (configTypeEnum) {
                         case MENU:
                             langName = "Menu abc";//dubboQueryLangMsgService.getI18nLangMenuMsg(resultValue,syI18nLangEnum);

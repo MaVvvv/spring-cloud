@@ -1,7 +1,5 @@
 package com.channelsoft.supthread;
 
-import java.util.concurrent.CountDownLatch;
-
 /**
  * 火箭发射器
  *
@@ -11,16 +9,18 @@ import java.util.concurrent.CountDownLatch;
 public class CountDownLatchTest {
 
     public static void main(String[] args) throws Exception {
-        CountDownLatch countDownLatch = new CountDownLatch(6);
-        for (int i = 1; i <= 5; i++) {
+        TestCountDown testCountDown = new TestCountDown();
+        for (int i = 1; i <= 20; i++) {
+            String threadName = "countName" + i;
             new Thread(() -> {
-                System.out.println(Thread.currentThread().getName() + "Go out!");
-                countDownLatch.countDown();
+                try {
+                    testCountDown.testCountDownSync(threadName);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             },String.valueOf(i)).start();
         }
-        countDownLatch.await();
-
-
         System.out.println("Clear Door");
     }
+
 }
